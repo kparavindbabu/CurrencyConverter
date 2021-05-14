@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Models
 {
-    public class LatestExchangeRates
+    public class HistoricExchangeRates
     {
         [JsonProperty("success")]
         public bool Success { get; set; }
@@ -16,6 +16,9 @@ namespace CurrencyConverter.Models
 
         [JsonProperty("base")]
         public string Base { get; set; }
+
+        [JsonProperty("historical")]
+        public bool Historical { get; set; }
 
         [JsonProperty("date")]
         public string Date { get; set; }

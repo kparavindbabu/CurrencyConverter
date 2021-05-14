@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,13 +10,16 @@ namespace CurrencyConverter.Models
     public class CreateConversion
     {
         [Required]
-        public string fromCurrency { get; set; }
+        [JsonProperty("fromCurrency")]
+        public string FromCurrency { get; set; }
 
         [Required]
-        public string toCurrency { get; set; }
+        [JsonProperty("toCurrency")]
+        public string ToCurrency { get; set; }
 
         [Required]
-        public float value { get; set; }
+        [JsonProperty("value")]
+        public float Value { get; set; }
 
     }
 }

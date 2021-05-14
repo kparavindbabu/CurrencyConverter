@@ -30,7 +30,7 @@ namespace CurrencyConverter
             services.AddControllers();
             services.AddMvc().AddNewtonsoftJson();
             services.AddHttpClient<ICurrencyService, CurrencyService>( c => {
-                c.BaseAddress = new Uri("http://api.exchangeratesapi.io/v1");
+                c.BaseAddress = new Uri(Configuration.GetValue<string>("currencyApi:Url"));
             });
 
             services.AddSwaggerDocument(configure => configure.Title = "Currency Converter");

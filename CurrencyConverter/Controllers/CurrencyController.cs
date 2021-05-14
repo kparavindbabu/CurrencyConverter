@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Controllers
 {
+    [Produces("application/json")]
     [Route("api/currencies")]
     [ApiController]
     public class CurrencyController : ControllerBase
@@ -36,13 +37,9 @@ namespace CurrencyConverter.Controllers
         /// <response code="400">If the something wrong</response> 
 
         [HttpGet]
-        public ActionResult<LatestExchangeRates> GetAllCurrencies()
+        public ActionResult<Array> GetAllCurrencies()
         {
-            LatestExchangeRates latestExchangeRates;
-
-            latestExchangeRates = _currencyRepository.GetAllConversionRatesByCurrency("");
-
-            return Ok(latestExchangeRates);
+            return Ok(_currencyRepository.GetAllAvailableCurrencies());
         }
 
         /// <summary>
@@ -53,9 +50,7 @@ namespace CurrencyConverter.Controllers
         [HttpGet("{currencyCode}")]
         public ActionResult<LatestExchangeRates> GetRatesByCurrency(string currencyCode)
         {
-            LatestExchangeRates latestExchangeRates;
-
-            latestExchangeRates = _currencyRepository.GetAllConversionRatesByCurrency(currencyCode);
+            LatestExchangeRates latestExchangeRates = _currencyRepository.GetAllConversionRatesByCurrency(currencyCode);
 
             return Ok(latestExchangeRates);
         }
@@ -65,13 +60,13 @@ namespace CurrencyConverter.Controllers
         /// </summary>
         /// <param name="days"></param>
         
-        [Route("historic/{days}")]
-        [HttpGet("{days}")]
-        public async Task<string> GetHistoricRateByDate(int days)
+        [HttpGet("historic/{days}")]
+        public ActionResult<HistoricExchangeRates> GetHistoricRateByDate(int days)
         {
             DateTime currentDate = DateTime.Now;
-            currentDate = currentDate.AddDays(-days);
-            return await _currencyRepository.GetHistoricRateByDate(currentDate);
+            HistoricExchangeRates historicExchangeRates = _currencyRepository.GetHistoricRateByDate(currentDate.AddDays(-days));
+
+            return Ok(historicExchangeRates);
         }
 
         /// <summary>
@@ -82,9 +77,9 @@ namespace CurrencyConverter.Controllers
         ///
         ///     POST /api/currencies
         ///     {
-        ///        "value": 10,
         ///        "fromCurrency": "EUR",
-        ///        "toCurrency": "GBP"
+        ///        "toCurrency": "GBP",
+        ///        "value": 10
         ///     }
         ///
         /// </remarks>
@@ -93,11 +88,18 @@ namespace CurrencyConverter.Controllers
         /// <response code="400">If the something wrong</response> 
 
         [HttpPost]
-        public async Task<object> ConvertSourceToDestinationCurrency(CreateConversion data)
+        public ActionResult<ShowConversion> ConvertSourceToDestinationCurrency([FromBody]CreateConversion data)
         {
-            Console.WriteLine(data);
-            return await _currencyRepository.ConvertSourceToDestinationCurrency(data);
-            //return await _currencyRepository.ConvertSourceToDestinationCurrency("");
+            try
+            {
+                ShowConversion showConversion = _currencyRepository.Convert(data);
+                return Ok(showConversion);
+            }
+            catch(NotSupportedException e)
+            {
+                return NotFound();
+            }
+            
         }
     }
 }

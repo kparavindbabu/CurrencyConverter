@@ -9,10 +9,13 @@ namespace CurrencyConverter.Interfaces
 {
     public interface ICurrencyService
     {
+        Array GetAllAvailableCurrencies();
+
         LatestExchangeRates GetAllConversionRatesByCurrency(string currencyCode);
 
-        Task<string> ConvertSourceToDestinationCurrency(CreateConversion data);
-        Task<string> GetHistoricRateByDate(DateTime dateval);
+        ShowConversion Convert(CreateConversion data);
+
+        HistoricExchangeRates GetHistoricRateByDate(DateTime dateval);
 
     }
 }
