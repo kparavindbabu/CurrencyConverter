@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace CurrencyConverter.Repository
+namespace CurrencyConverter.Interfaces
 {
-    public interface ICurrencyRepository
+    public interface ICurrencyService
     {
         LatestExchangeRates GetAllConversionRatesByCurrency(string currencyCode);
 
