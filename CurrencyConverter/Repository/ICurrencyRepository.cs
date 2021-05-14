@@ -9,9 +9,9 @@ namespace CurrencyConverter.Repository
 {
     public interface ICurrencyRepository
     {
-        Task<string> GetAllConversionRatesByCurrency(string currencyCode);
+        LatestExchangeRates GetAllConversionRatesByCurrency(string currencyCode);
 
-        Task<string> ConvertSourceToDestinationCurrency(CreateConvertion data);
+        Task<string> ConvertSourceToDestinationCurrency(CreateConversion data);
         Task<string> GetHistoricRateByDate(DateTime dateval);
 
     }

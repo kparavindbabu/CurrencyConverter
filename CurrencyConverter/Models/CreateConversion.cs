@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CurrencyConverter.Models
 {
-    public class CreateConvertion
+    public class CreateConversion
     {
         [Required]
         public string fromCurrency { get; set; }

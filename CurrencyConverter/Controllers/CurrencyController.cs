@@ -23,15 +23,23 @@ namespace CurrencyConverter.Controllers
         }
 
         [HttpGet]
-        public async Task<string> GetAllCurrencies()
+        public ActionResult<LatestExchangeRates> GetAllCurrencies()
         {
-            return await _currencyRepository.GetAllConversionRatesByCurrency("");
+            LatestExchangeRates latestExchangeRates;
+
+            latestExchangeRates = _currencyRepository.GetAllConversionRatesByCurrency("");
+
+            return Ok(latestExchangeRates);
         }
 
         [HttpGet("{currencyCode}")]
-        public async Task<string> GetRatesByCurrency(string currencyCode)
+        public ActionResult<LatestExchangeRates> GetRatesByCurrency(string currencyCode)
         {
-            return await _currencyRepository.GetAllConversionRatesByCurrency(currencyCode);
+            LatestExchangeRates latestExchangeRates;
+
+            latestExchangeRates = _currencyRepository.GetAllConversionRatesByCurrency(currencyCode);
+
+            return Ok(latestExchangeRates);
         }
 
         [Route("historic/{days}")]
@@ -44,7 +52,7 @@ namespace CurrencyConverter.Controllers
         }
 
         [HttpPost]
-        public async Task<object> ConvertSourceToDestinationCurrency(CreateConvertion data)
+        public async Task<object> ConvertSourceToDestinationCurrency(CreateConversion data)
         {
             Console.WriteLine(data);
             return await _currencyRepository.ConvertSourceToDestinationCurrency(data);

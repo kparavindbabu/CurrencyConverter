@@ -1,6 +1,7 @@
 ﻿using CurrencyConverter.Models;
 using CurrencyConverter.Repository;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,26 +21,42 @@ namespace CurrencyConverter.Services
             this.accessKey = configuration.GetValue<string>("currencyApiKey");
         }
 
-        public async Task<string> ConvertSourceToDestinationCurrency(CreateConvertion data)
+        public async Task<string> ConvertSourceToDestinationCurrency(CreateConversion data)
         {
-            string APIURL = $"/convert?access_key={this.accessKey}&from={data.fromCurrency}"+ 
+            string apiUrl = $"/convert?access_key={this.accessKey}&from={data.fromCurrency}"+ 
                             $"&to={data.toCurrency}&amount={data.value}";
-            var response = await _httpClient.GetAsync(APIURL);
+            var response = await _httpClient.GetAsync(apiUrl);
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<string> GetAllConversionRatesByCurrency(string currencyCode)
+        public LatestExchangeRates GetAllConversionRatesByCurrency(string currencyCode)
         {
-            string APIURL = $"/latest?access_key={this.accessKey}&base={currencyCode}";
-            var response = await _httpClient.GetAsync(APIURL);
-            return await response.Content.ReadAsStringAsync();
+            LatestExchangeRates latestExchangeRates;
+
+            string apiUrl = $"/latest?access_key={this.accessKey}&base={currencyCode}";
+            // var response = await _httpClient.GetAsync(apiUrl);
+            // var result = await response.Content.ReadAsStringAsync();
+            // List<LatestExchangeRates> businessunits = JsonConvert.DeserializeObject<List<LatestExchangeRates>>(result);
+
+            HttpResponseMessage getResponseMessage = _httpClient.GetAsync(apiUrl).Result;
+
+            if (!getResponseMessage.IsSuccessStatusCode)
+                throw new Exception(getResponseMessage.ToString());
+
+            var responsemessage = getResponseMessage.Content.ReadAsStringAsync().Result;
+
+            dynamic project = JsonConvert.DeserializeObject(responsemessage);
+
+            latestExchangeRates = project.ToObject<LatestExchangeRates>();
+
+            return latestExchangeRates;
         }
 
         public async Task<string> GetHistoricRateByDate(DateTime dateval)
         {
             var historyDate = dateval.ToString("yyyy-MM-dd");
-            string APIURL = $"/{historyDate}?access_key={this.accessKey}&base=EUR";
-            var response = await _httpClient.GetAsync(APIURL);
+            string apiUrl = $"/{historyDate}?access_key={this.accessKey}&base=EUR";
+            var response = await _httpClient.GetAsync(apiUrl);
             return await response.Content.ReadAsStringAsync();
         }
     }
