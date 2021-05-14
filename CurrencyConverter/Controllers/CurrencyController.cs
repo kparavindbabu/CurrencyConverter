@@ -1,4 +1,5 @@
-﻿using CurrencyConverter.Repository;
+﻿using CurrencyConverter.Models;
+using CurrencyConverter.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -43,11 +44,10 @@ namespace CurrencyConverter.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> ConvertSourceToDestinationCurrency(string data)
+        public async Task<object> ConvertSourceToDestinationCurrency(CreateConvertion data)
         {
             Console.WriteLine(data);
-            return Ok();
-
+            return await _currencyRepository.ConvertSourceToDestinationCurrency(data);
             //return await _currencyRepository.ConvertSourceToDestinationCurrency("");
         }
     }

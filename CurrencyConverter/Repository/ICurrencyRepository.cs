@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CurrencyConverter.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -10,9 +11,7 @@ namespace CurrencyConverter.Repository
     {
         Task<string> GetAllConversionRatesByCurrency(string currencyCode);
 
-        Task<string> ConvertSourceToDestinationCurrency(string sourceCurrencyCode,
-                                                        string destinationCurrencyCode,
-                                                        float convertionValue);
+        Task<string> ConvertSourceToDestinationCurrency(CreateConvertion data);
         Task<string> GetHistoricRateByDate(DateTime dateval);
 
     }

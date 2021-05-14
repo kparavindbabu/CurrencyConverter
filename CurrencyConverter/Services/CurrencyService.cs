@@ -1,4 +1,5 @@
-﻿using CurrencyConverter.Repository;
+﻿using CurrencyConverter.Models;
+using CurrencyConverter.Repository;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,10 @@ namespace CurrencyConverter.Services
             this.accessKey = configuration.GetValue<string>("currencyApiKey");
         }
 
-        public async string ConvertSourceToDestinationCurrency(string sourceCurrencyCode,
-                                                                     string destinationCurrencyCode,
-                                                                     float convertionValue)
+        public async Task<string> ConvertSourceToDestinationCurrency(CreateConvertion data)
         {
-            string APIURL = $"/convert?access_key={this.accessKey}&from={sourceCurrencyCode}"+ 
-                            $"&to={destinationCurrencyCode}&amount={convertionValue}";
+            string APIURL = $"/convert?access_key={this.accessKey}&from={data.fromCurrency}"+ 
+                            $"&to={data.toCurrency}&amount={data.value}";
             var response = await _httpClient.GetAsync(APIURL);
             return await response.Content.ReadAsStringAsync();
         }
