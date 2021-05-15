@@ -65,34 +65,55 @@ namespace CurrencyConverter.Services
 
         public LatestExchangeRates GetAllConversionRatesByCurrency(string currencyCode)
         {
-            LatestExchangeRates latestExchangeRates;
-
-            string apiUrl = $"/latest?access_key={this.accessKey}&base={currencyCode}";
+            string apiUrl = $"/latest?access_key={this.accessKey}&base=EUR";
 
             var responseMessage = HttpCall(apiUrl);
 
-            latestExchangeRates = JsonConvert.DeserializeObject<LatestExchangeRates>(responseMessage);
+            LatestExchangeRates latestExchangeRates = JsonConvert.DeserializeObject<LatestExchangeRates>(responseMessage);
+
+            latestExchangeRates = ConvertAsBaseCurrency(latestExchangeRates, currencyCode);
 
             return latestExchangeRates;
+        }
+
+        private LatestExchangeRates ConvertAsBaseCurrency(LatestExchangeRates latestExchangeRates, string currencyCode)
+        {
+            if(latestExchangeRates.Base == currencyCode)
+            {
+                return latestExchangeRates;
+            }
+
+            LatestExchangeRates convertedRates = new LatestExchangeRates();
+
+            convertedRates.Base = currencyCode;
+            convertedRates.Timestamp = latestExchangeRates.Timestamp;
+            convertedRates.Date = latestExchangeRates.Date;
+            convertedRates.Success = latestExchangeRates.Success;
+            convertedRates.Rates = new Dictionary<string, float>();
+           
+            foreach (KeyValuePair<string, float> entry in latestExchangeRates.Rates.ToList())
+            {
+                ShowConversion showConversion = new ShowConversion(currencyCode, entry.Key, 0);
+                convertedRates.Rates.Add(entry.Key, CalculateExchangeRateValue(showConversion, latestExchangeRates));
+            }
+
+            return convertedRates;
         }
 
         public HistoricExchangeRates GetHistoricRateByDate(DateTime dateval)
         {
             var historyDate = dateval.ToString("yyyy-MM-dd");
 
-            HistoricExchangeRates historicExchangeRates;
-
             string apiUrl = $"/{historyDate}?access_key={this.accessKey}&base=EUR";
 
             var responseMessage = HttpCall(apiUrl);
 
-            historicExchangeRates = JsonConvert.DeserializeObject<HistoricExchangeRates>(responseMessage);
+            HistoricExchangeRates historicExchangeRates = JsonConvert.DeserializeObject<HistoricExchangeRates>(responseMessage);
 
             return historicExchangeRates;
         }
         private string HttpCall(string apiUrl)
         {
-
             HttpResponseMessage getResponseMessage = _httpClient.GetAsync(apiUrl).Result;
 
             if (!getResponseMessage.IsSuccessStatusCode)
