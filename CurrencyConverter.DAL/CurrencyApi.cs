@@ -17,6 +17,15 @@ namespace CurrencyConverter.DAL
             this._accessKey = configuration.GetValue<string>("currencyApi:Key");
         }
 
+        // Summary:
+        //   Calls the currency API provider endpoints through HttpClient 
+        //
+        // Parameters:
+        //   string apiUrl:
+        //     Actual end point to be called.
+        // Return:
+        //   string 
+        //     Http response as string
         public string Call(string apiUrl)
         {
             apiUrl += $"&access_key={this._accessKey}";

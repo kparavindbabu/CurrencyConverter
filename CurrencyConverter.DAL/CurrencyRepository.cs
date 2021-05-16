@@ -1,11 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using CurrencyConverter.DAL.Models;
 
 namespace CurrencyConverter.DAL
@@ -19,6 +13,15 @@ namespace CurrencyConverter.DAL
             this._currencyApi = currencyApi;
         }
 
+        // Summary:
+        //   Gets latest currency exchange rates for base currency {currencyCode} 
+        //
+        // Parameters:
+        //   string currencyCode:
+        //     Currency codes like EUR, GBP, INR, etc,.
+        // Return:
+        //   LatestExchangeRates 
+        //     Typed response from the Http as LatestExchangeRates
         public LatestExchangeRates GetLatestConversionRatesByCurrency(string currencyCode)
         {
             string apiUrl = $"/latest?base=EUR";
@@ -30,6 +33,15 @@ namespace CurrencyConverter.DAL
             return latestExchangeRates;
         }
 
+        // Summary:
+        //   Gets historic currency exchange rates to the base currency EUR for the date {dateval} 
+        //
+        // Parameters:
+        //   DateTime dateval:
+        //     Any Historic DateTime value
+        // Return:
+        //   HistoricExchangeRates 
+        //     Typed response from the Http as HistoricExchangeRates
         public HistoricExchangeRates GetConversionRatesByDate(DateTime dateval)
         {
             var historyDate = dateval.ToString("yyyy-MM-dd");

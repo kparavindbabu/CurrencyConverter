@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CurrencyConverter.BLL.Dtos
 {
@@ -34,9 +30,8 @@ namespace CurrencyConverter.BLL.Dtos
         [JsonProperty("ExchangeRate")]
         public float ExchangeRate { get; set; }
 
-        [Required]
         [JsonProperty("Result")]
-        public float Result { get; set; }
+        public float Result => ExchangeRate * BaseValue;
 
     }
 }
