@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CurrencyConverter.Models
+namespace CurrencyConverter.DAL.Models
 {
-    public class HistoricExchangeRates
+    public class LatestExchangeRates
     {
         [JsonProperty("success")]
         public bool Success { get; set; }
@@ -16,9 +16,6 @@ namespace CurrencyConverter.Models
 
         [JsonProperty("base")]
         public string Base { get; set; }
-
-        [JsonProperty("historical")]
-        public bool Historical { get; set; }
 
         [JsonProperty("date")]
         public string Date { get; set; }

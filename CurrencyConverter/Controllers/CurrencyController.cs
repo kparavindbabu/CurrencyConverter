@@ -1,6 +1,4 @@
-﻿using CurrencyConverter.Interfaces;
-using CurrencyConverter.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -8,19 +6,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CurrencyConverter.BLL.Services;
+using CurrencyConverter.BLL.Dtos;
 
-namespace CurrencyConverter.Controllers
+namespace CurrencyConverter.Web.Controllers
 {
     [Produces("application/json")]
     [Route("api/currencies")]
     [ApiController]
     public class CurrencyController : ControllerBase
     {
-        private readonly ICurrencyService _currencyRepository;
+        private readonly ICurrencyService _currencyService;
 
-        public CurrencyController(ICurrencyService currencyRepository)
+        public CurrencyController(ICurrencyService currencyService)
         {
-            this._currencyRepository = currencyRepository;
+            this._currencyService = currencyService;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace CurrencyConverter.Controllers
         [HttpGet]
         public ActionResult<Array> GetAllCurrencies()
         {
-            return Ok(_currencyRepository.GetAllAvailableCurrencies());
+            return Ok(this._currencyService.GetAllAvailableCurrencies());
         }
 
         /// <summary>
@@ -48,11 +48,16 @@ namespace CurrencyConverter.Controllers
         /// <param name="currencyCode"></param>
         
         [HttpGet("{currencyCode}")]
-        public ActionResult<LatestExchangeRates> GetRatesByCurrency(string currencyCode)
+        public ActionResult<ShowExchangeRateDto> GetRatesByCurrency(string currencyCode)
         {
-            LatestExchangeRates latestExchangeRates = _currencyRepository.GetAllConversionRatesByCurrency(currencyCode);
+            ShowExchangeRateDto showExchangeRateDto = this._currencyService.GetAllConversionRatesByCurrency(currencyCode);
 
-            return Ok(latestExchangeRates);
+            if (showExchangeRateDto.Base is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(showExchangeRateDto);
         }
 
         /// <summary>
@@ -61,12 +66,17 @@ namespace CurrencyConverter.Controllers
         /// <param name="days"></param>
         
         [HttpGet("historic/{days}")]
-        public ActionResult<HistoricExchangeRates> GetHistoricRateByDate(int days)
+        public ActionResult<ShowExchangeRateDto> GetHistoricRateByDate(int days)
         {
             DateTime currentDate = DateTime.Now;
-            HistoricExchangeRates historicExchangeRates = _currencyRepository.GetHistoricRateByDate(currentDate.AddDays(-days));
+            ShowExchangeRateDto showExchangeRateDto = this._currencyService.GetHistoricRateByDate(currentDate.AddDays(-days));
 
-            return Ok(historicExchangeRates);
+            if (showExchangeRateDto.Base is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(showExchangeRateDto);
         }
 
         /// <summary>
@@ -88,18 +98,16 @@ namespace CurrencyConverter.Controllers
         /// <response code="400">If the something wrong</response> 
 
         [HttpPost]
-        public ActionResult<ShowConversion> ConvertSourceToDestinationCurrency([FromBody]CreateConversion data)
+        public ActionResult<ShowConversionDto> ConvertSourceToDestinationCurrency([FromBody]CreateConversionDto createConversionDto)
         {
-            try
-            {
-                ShowConversion showConversion = _currencyRepository.Convert(data);
-                return Ok(showConversion);
-            }
-            catch(NotSupportedException e)
+            ShowConversionDto showConversionDto = this._currencyService.Convert(createConversionDto);
+            
+            if (showConversionDto.FromCurrency is null)
             {
                 return NotFound();
             }
-            
+
+            return Ok(showConversionDto);
         }
     }
 }

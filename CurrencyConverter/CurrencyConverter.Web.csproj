@@ -2,11 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>CurrencyConverter.Web</AssemblyName>
+    <RootNamespace>CurrencyConverter.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.15" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CurrencyConverter.BLL\CurrencyConverter.BLL.csproj" />
   </ItemGroup>
 
 

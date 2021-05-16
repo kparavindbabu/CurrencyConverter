@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CurrencyConverter.Models
+namespace CurrencyConverter.BLL.Dtos
 {
-    public class ShowConversion
+    public class ShowConversionDto
     {
-        public ShowConversion(string fromCurrency, string toCurrency, float baseValue)
+        public ShowConversionDto(string fromCurrency, string toCurrency, float baseValue)
         {
             this.FromCurrency = fromCurrency;
             this.ToCurrency = toCurrency;
@@ -18,10 +18,12 @@ namespace CurrencyConverter.Models
 
         [Required]
         [JsonProperty("FromCurrency")]
+        [MinLength(3), MaxLength(3)]
         public string FromCurrency { get; set; }
 
         [Required]
         [JsonProperty("ToCurrency")]
+        [MinLength(3), MaxLength(3)]
         public string ToCurrency { get; set; }
 
         [Required]

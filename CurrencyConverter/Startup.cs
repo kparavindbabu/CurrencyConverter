@@ -1,5 +1,5 @@
-using CurrencyConverter.Interfaces;
-using CurrencyConverter.Services;
+using CurrencyConverter.BLL.Services;
+using CurrencyConverter.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CurrencyConverter
+namespace CurrencyConverter.Web
 {
     public class Startup
     {
@@ -29,9 +29,13 @@ namespace CurrencyConverter
         {
             services.AddControllers();
             services.AddMvc().AddNewtonsoftJson();
-            services.AddHttpClient<ICurrencyService, CurrencyService>( c => {
+            services.AddHttpClient("currency", c => {
                 c.BaseAddress = new Uri(Configuration.GetValue<string>("currencyApi:Url"));
             });
+
+            services.AddTransient<ICurrencyService, CurrencyService>();
+            services.AddTransient<ICurrencyRepository, CurrencyRepository>();
+            services.AddSingleton<ICurrencyApi, CurrencyApi>();
 
             services.AddSwaggerDocument(configure => configure.Title = "Currency Converter");
         }
