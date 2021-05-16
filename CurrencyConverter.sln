@@ -5,9 +5,14 @@ VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.Web", "CurrencyConverter.Web\CurrencyConverter.Web.csproj", "{E09EC582-70E8-46AF-A03A-5A27568F7F7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.BLL", "CurrencyConverter.BLL\CurrencyConverter.BLL.csproj", "{A4F45D4E-D1B2-476B-B138-F1877176F8D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.BLL", "CurrencyConverter.BLL\CurrencyConverter.BLL.csproj", "{A4F45D4E-D1B2-476B-B138-F1877176F8D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyConverter.DAL", "CurrencyConverter.DAL\CurrencyConverter.DAL.csproj", "{B91CB331-DD7E-45F2-97C0-462B321A14C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyConverter.DAL", "CurrencyConverter.DAL\CurrencyConverter.DAL.csproj", "{B91CB331-DD7E-45F2-97C0-462B321A14C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A54D03DC-73DB-4691-95D1-44B9187E5824}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
