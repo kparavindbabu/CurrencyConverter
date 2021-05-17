@@ -36,8 +36,8 @@ namespace CurrencyConverter.Web.Controllers
 
         [HttpGet]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(typeof(ShowExchangeRateDto), StatusCodes.Status200OK)]
-        public ActionResult<Array> GetAllCurrencies()
+        [ProducesResponseType(typeof(ListCurrencyDto), StatusCodes.Status200OK)]
+        public ActionResult<ListCurrencyDto> GetAllCurrencies()
         {
             try
             {

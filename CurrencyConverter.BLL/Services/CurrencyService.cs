@@ -188,13 +188,13 @@ namespace CurrencyConverter.BLL.Services
         // Return:
         //   ShowExchangeRateDto
         //     An instance to ShowExchangeRateDto
-        public Array GetAllAvailableCurrencies()
+        public ListCurrencyDto GetAllAvailableCurrencies()
         {
             ShowExchangeRateDto showExchangeRateDto = GetAllConversionRatesByCurrency("EUR");
 
             Array currencyList = showExchangeRateDto.Rates.Keys.ToArray();
 
-            return currencyList;
+            return new ListCurrencyDto{ Currencies = (string[])currencyList };
         }
         #endregion
 

@@ -5,7 +5,7 @@ namespace CurrencyConverter.BLL.Services
 {
     public interface ICurrencyService
     {
-        Array GetAllAvailableCurrencies();
+        ListCurrencyDto GetAllAvailableCurrencies();
 
         ShowExchangeRateDto GetAllConversionRatesByCurrency(string currencyCode);
 
