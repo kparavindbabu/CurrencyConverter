@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using CurrencyConverter.DAL.Models;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.DAL
 {
@@ -22,11 +23,11 @@ namespace CurrencyConverter.DAL
         // Return:
         //   LatestExchangeRates 
         //     Typed response from the Http as LatestExchangeRates
-        public LatestExchangeRates GetLatestConversionRatesByCurrency(string currencyCode)
+        public async Task<LatestExchangeRates> GetLatestConversionRatesByCurrency(string currencyCode)
         {
             string apiUrl = $"/latest?base=EUR";
 
-            var responseMessage = this._currencyApi.Call(apiUrl);
+            var responseMessage = await this._currencyApi.Call(apiUrl);
 
             LatestExchangeRates latestExchangeRates = JsonConvert.DeserializeObject<LatestExchangeRates>(responseMessage);
 
@@ -42,13 +43,13 @@ namespace CurrencyConverter.DAL
         // Return:
         //   HistoricExchangeRates 
         //     Typed response from the Http as HistoricExchangeRates
-        public HistoricExchangeRates GetConversionRatesByDate(DateTime dateval)
+        public async Task<HistoricExchangeRates> GetConversionRatesByDate(DateTime dateval)
         {
             var historyDate = dateval.ToString("yyyy-MM-dd");
 
             string apiUrl = $"/{historyDate}?base=EUR";
 
-            var responseMessage = this._currencyApi.Call(apiUrl);
+            var responseMessage = await this._currencyApi.Call(apiUrl);
 
             HistoricExchangeRates historicExchangeRates = JsonConvert.DeserializeObject<HistoricExchangeRates>(responseMessage);
 

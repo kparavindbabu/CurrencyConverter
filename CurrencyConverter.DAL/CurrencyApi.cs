@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.DAL
 {
@@ -26,18 +27,21 @@ namespace CurrencyConverter.DAL
         // Return:
         //   string 
         //     Http response as string
-        public string Call(string apiUrl)
+        public async Task<string> Call(string apiUrl)
         {
             apiUrl += $"&access_key={this._accessKey}";
 
             try
             {
-                HttpResponseMessage getResponseMessage = this._httpClient.GetAsync(apiUrl).Result;
+                HttpResponseMessage response = await this._httpClient.GetAsync(apiUrl);
 
-                if (!getResponseMessage.IsSuccessStatusCode)
-                    throw new Exception(getResponseMessage.ToString());
+                response.EnsureSuccessStatusCode();
+                // string responseBody = await response.Content.ReadAsStringAsync();
 
-                return getResponseMessage.Content.ReadAsStringAsync().Result;
+                //if (!getResponseMessage.IsSuccessStatusCode)
+                //    throw new Exception(getResponseMessage.ToString());
+
+                return await response.Content.ReadAsStringAsync(); ;
             }
             catch (Exception e)
             {

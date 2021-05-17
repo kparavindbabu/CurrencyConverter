@@ -4,6 +4,7 @@ using System;
 using CurrencyConverter.BLL.Services;
 using CurrencyConverter.BLL.Dtos;
 using System.Net.Mime;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.Web.Controllers
 {
@@ -37,11 +38,11 @@ namespace CurrencyConverter.Web.Controllers
         [HttpGet]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ListCurrencyDto), StatusCodes.Status200OK)]
-        public ActionResult<ListCurrencyDto> GetAllCurrencies()
+        public async Task<ActionResult<ListCurrencyDto>> GetAllCurrencies()
         {
             try
             {
-                return Ok(this._currencyService.GetAllAvailableCurrencies());
+                return Ok( await this._currencyService.GetAllAvailableCurrencies());
             }
             catch (Exception)
             {
@@ -69,11 +70,11 @@ namespace CurrencyConverter.Web.Controllers
         [HttpGet("{currencyCode}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ShowExchangeRateDto), StatusCodes.Status200OK)]
-        public ActionResult<ShowExchangeRateDto> GetRatesByCurrency(string currencyCode)
+        public async Task<ActionResult<ShowExchangeRateDto>> GetRatesByCurrency(string currencyCode)
         {
             try
             {
-                ShowExchangeRateDto showExchangeRateDto = this._currencyService.GetAllConversionRatesByCurrency(currencyCode);
+                ShowExchangeRateDto showExchangeRateDto = await this._currencyService.GetAllConversionRatesByCurrency(currencyCode);
 
                 if (showExchangeRateDto.Base is null)
                 {
@@ -109,12 +110,12 @@ namespace CurrencyConverter.Web.Controllers
         [HttpGet("historic/{days}")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ShowExchangeRateDto), StatusCodes.Status200OK)]
-        public ActionResult<ShowExchangeRateDto> GetHistoricRateByDate(int days)
+        public async Task<ActionResult<ShowExchangeRateDto>> GetHistoricRateByDate(int days)
         {
             try
             {
                 DateTime currentDate = DateTime.Now;
-                ShowExchangeRateDto showExchangeRateDto = this._currencyService.GetHistoricRateByDate(currentDate.AddDays(-days));
+                ShowExchangeRateDto showExchangeRateDto = await _currencyService.GetHistoricRateByDate(currentDate.AddDays(-days));
 
                 if (showExchangeRateDto.Base is null)
                 {
@@ -155,11 +156,11 @@ namespace CurrencyConverter.Web.Controllers
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ShowConversionDto), StatusCodes.Status200OK)]
-        public ActionResult<ShowConversionDto> ConvertSourceToDestinationCurrency([FromBody]CreateConversionDto createConversionDto)
+        public async Task<ActionResult<ShowConversionDto>> ConvertSourceToDestinationCurrency([FromBody]CreateConversionDto createConversionDto)
         {
             try
             {
-                ShowConversionDto showConversionDto = this._currencyService.Convert(createConversionDto);
+                ShowConversionDto showConversionDto = await this._currencyService.Convert(createConversionDto);
                 if (showConversionDto.FromCurrency is null)
                 {
                     // need to log

@@ -1,17 +1,18 @@
 ﻿using CurrencyConverter.BLL.Dtos;
 using System;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.BLL.Services
 {
     public interface ICurrencyService
     {
-        ListCurrencyDto GetAllAvailableCurrencies();
+        Task<ListCurrencyDto> GetAllAvailableCurrencies();
 
-        ShowExchangeRateDto GetAllConversionRatesByCurrency(string currencyCode);
+        Task<ShowExchangeRateDto> GetAllConversionRatesByCurrency(string currencyCode);
 
-        ShowConversionDto Convert(CreateConversionDto createConversionDto);
+        Task<ShowConversionDto> Convert(CreateConversionDto createConversionDto);
 
-        ShowExchangeRateDto GetHistoricRateByDate(DateTime dateval);
+        Task<ShowExchangeRateDto> GetHistoricRateByDate(DateTime dateval);
 
     }
 }

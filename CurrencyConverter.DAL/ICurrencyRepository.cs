@@ -1,12 +1,13 @@
 ﻿using CurrencyConverter.DAL.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.DAL
 {
     public interface ICurrencyRepository
     {
-        HistoricExchangeRates GetConversionRatesByDate(DateTime dateval);
+        Task<HistoricExchangeRates> GetConversionRatesByDate(DateTime dateval);
 
-        LatestExchangeRates GetLatestConversionRatesByCurrency(string currencyCode);
+        Task<LatestExchangeRates> GetLatestConversionRatesByCurrency(string currencyCode);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using CurrencyConverter.DAL;
 using CurrencyConverter.DAL.Models;
 using CurrencyConverter.BLL.Dtos;
+using System.Threading.Tasks;
 
 namespace CurrencyConverter.BLL.Services
 {
@@ -28,9 +29,9 @@ namespace CurrencyConverter.BLL.Services
         // Return:
         //   showConversionDto
         //     An instance to ShowConversionDto
-        public ShowConversionDto Convert(CreateConversionDto createConversionDto)
+        public async Task<ShowConversionDto> Convert(CreateConversionDto createConversionDto)
         {
-            ShowConversionDto showConversionDto = CalculateValue(createConversionDto);
+            ShowConversionDto showConversionDto = await CalculateValue(createConversionDto);
 
             return showConversionDto;
         }
@@ -44,9 +45,9 @@ namespace CurrencyConverter.BLL.Services
         // Return:
         //   showConversionDto
         //     An instance to ShowConversionDto
-        private ShowConversionDto CalculateValue(CreateConversionDto createConversionDto)
+        private async Task<ShowConversionDto> CalculateValue(CreateConversionDto createConversionDto)
         {
-            LatestExchangeRates latestExchangeRates = _currencyRepository.GetLatestConversionRatesByCurrency("EUR");
+            LatestExchangeRates latestExchangeRates = await _currencyRepository.GetLatestConversionRatesByCurrency("EUR");
             
             ShowConversionDto showConversionDto = new ShowConversionDto(createConversionDto.FromCurrency, createConversionDto.ToCurrency, createConversionDto.Value);
             showConversionDto.ExchangeRate = CalculateExchangeRateValue(showConversionDto, latestExchangeRates);
@@ -110,9 +111,9 @@ namespace CurrencyConverter.BLL.Services
         // Return:
         //   showExchangeRateDto
         //     An instance to ShowExchangeRateDto
-        public ShowExchangeRateDto GetAllConversionRatesByCurrency(string currencyCode)
+        public async Task<ShowExchangeRateDto> GetAllConversionRatesByCurrency(string currencyCode)
         {
-            LatestExchangeRates latestExchangeRates = _currencyRepository.GetLatestConversionRatesByCurrency("EUR");
+            LatestExchangeRates latestExchangeRates = await _currencyRepository.GetLatestConversionRatesByCurrency("EUR");
            
             return ConvertAsBaseCurrency(latestExchangeRates, currencyCode); ;
         }
@@ -165,9 +166,9 @@ namespace CurrencyConverter.BLL.Services
         // Return:
         //   ShowExchangeRateDto
         //     An instance to ShowExchangeRateDto
-        public ShowExchangeRateDto GetHistoricRateByDate(DateTime dateval)
+        public async Task<ShowExchangeRateDto> GetHistoricRateByDate(DateTime dateval)
         {
-            HistoricExchangeRates historicExchangeRates = _currencyRepository.GetConversionRatesByDate(dateval);
+            HistoricExchangeRates historicExchangeRates = await _currencyRepository.GetConversionRatesByDate(dateval);
 
             ShowExchangeRateDto showExchangeRateDto = new ShowExchangeRateDto()
             {
@@ -188,9 +189,9 @@ namespace CurrencyConverter.BLL.Services
         // Return:
         //   ShowExchangeRateDto
         //     An instance to ShowExchangeRateDto
-        public ListCurrencyDto GetAllAvailableCurrencies()
+        public async Task<ListCurrencyDto> GetAllAvailableCurrencies()
         {
-            ShowExchangeRateDto showExchangeRateDto = GetAllConversionRatesByCurrency("EUR");
+            ShowExchangeRateDto showExchangeRateDto = await GetAllConversionRatesByCurrency("EUR");
 
             Array currencyList = showExchangeRateDto.Rates.Keys.ToArray();
 

@@ -1,7 +1,9 @@
-﻿namespace CurrencyConverter.DAL
+﻿using System.Threading.Tasks;
+
+namespace CurrencyConverter.DAL
 {
     public interface ICurrencyApi
     {
-        string Call(string apiUrl);
+        Task<string> Call(string apiUrl);
     }
 }
